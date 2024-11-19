@@ -1,0 +1,241 @@
+/*Table Head Indivisual Colors ************************/
+	table tbody tr>th:nth-child(2){
+		background-color : rgba(253,126,20,.12549);
+		color : #fd7e14;
+	}
+	table tbody tr>th:nth-child(3){
+		background-color : rgba(108, 117, 125, 0.13);
+		color : rgba(108, 117, 125, 0.84);
+	}
+	table tbody tr>th:nth-child(5){
+		background-color : rgba(40,167,69,.12549);
+		color : rgba(40,167,69,.84);
+	}
+	table tbody tr>th:nth-child(6){
+		background-color : rgba(255,7,58,.12549);
+		color : #ff073a;
+	}
+	table tbody tr>th:nth-child(7){
+		background-color : rgba(0,123,255,.0627451);
+		color : rgba(0,123,255,.84);
+	}
+	table tbody tr:nth-child(even) {
+		background-color: #e9edef !important;
+	}
+	table tbody tr:nth-child(odd) {
+		background-color: #f8f9fa !important;
+	}
+	/*******************************************************/
+/*********************** table with on screen orientation ***********/
+@media screen and (orientation:portrait){
+	table{
+		font-size : 11px ;
+		font-weight: 700;
+		border-spacing: 2px;
+		border-collapse: separate;
+	}
+	.table-responsive{
+		border : 0px !important;
+	}
+	table #achead{
+		font-size : 16px;
+		font-weight : 700;
+		background-color : #b2b6b9;
+	}
+	td,th {
+		border-radius : 5px;
+		border : 0px !important;
+	}
+	
+	.curpage{
+		margin-top: 0px;
+		font-size: 15px;
+		font-weight: 600;
+		font-family: monospace;
+		margin-left: 10px;
+		z-index: 10;
+		position: relative;
+		/*top: 45px;*/
+	}
+	#sugg {
+		font-weight : bold;
+		text-align :center;
+	    margin-top: -28px;
+	}
+	#sugg2 {
+	    font-size : 10px;
+		text-align :center
+	}
+	table tbody tr>th:nth-child(4){
+		display : none;
+	}
+	table tbody tr>td:nth-child(4){
+		display : none;
+	}
+	.container.paginations{
+		margin-top : 0px !important;
+		margin-bottom : 20px;
+	}
+	.pagination{
+		float : right;
+		margin : 0
+	}
+	.pagination>li>a{
+		float : none;
+	}
+	#page .container-fluid {
+		overflow : visible !important;
+	}
+/************************************ toggle switch CSS *************************************/
+	/*#today{
+		line-height: normal;
+		position: relative;
+		height: 15px;
+		width: 15px;
+		margin: 0;
+		vertical-align: bottom;
+		padding: 0;
+		top: -3px;
+	}*/
+	.switch {
+		position: relative;
+		display: inline-block;
+		width: 28px;
+		height: 13px;
+		float : right;
+		top: 3px;
+	}
+
+	.switch input { 
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		-webkit-transition: .4s;
+		transition: .4s;
+	}
+
+	.slider:before {
+		position: absolute;
+		content: "";
+		height: 17px;
+		width: 17px;
+		left: -1px;
+		bottom: -2px;
+		background-color: #e5e8ea;
+		-webkit-transition: .4s;
+		transition: .4s;
+		box-shadow: 0px 0px 1px grey;
+	}
+
+	input:checked + .slider {
+		background-color: #2196F3;
+	}
+
+	input:focus + .slider {
+		box-shadow: 0 0 1px #2196F3;
+	}
+
+	input:checked + .slider:before {
+		-webkit-transform: translateX(15px);
+		-ms-transform: translateX(15px);
+		transform: translateX(15px);
+	}
+
+	/* Rounded sliders */
+	.slider.round {
+		border-radius: 34px;
+	}
+
+	.slider.round:before {
+		border-radius: 50%;
+	}
+/*************************************************************************************************************/
+}
+@media screen and (orientation:landscape){
+	/*table{
+		font-size : 18px ;
+	}*/
+	table{
+		border-spacing: 2px;
+		border-collapse: separate;
+	}
+	.table-responsive{
+		border : 0px !important;
+		margin-top: 15px;
+	}
+	table #achead{
+		font-size : 16px;
+		font-weight : 700;
+		background-color : #b2b6b9;
+	}
+	table tbody tr>th:nth-child(4){
+		display : table-cell;
+	}
+	table tbody tr>th:nth-child(4){
+		background-color : rgba(218, 147, 219, 0.4);
+		color : rgba(218, 82, 226, 0.84);
+	}
+	#sugg2{
+		display:none;
+	}
+	table tbody tr>td:nth-child(4){
+		display : table-cell;
+		overflow-x: scroll;
+		overflow-y: visible;
+		max-width: 200px;
+		min-width:50px;
+	}
+	td,th {
+		border-radius : 5px;
+		border : 0px !important;
+	}
+	table tbody tr:nth-child(even) {
+		background-color: #e9edef !important;
+	}
+	#sugg,#frdate,#todate,#account,#show{
+		display:none;
+	}
+	.report label{
+		display:none;
+	} 
+	.container.Filter{
+		display:none;
+		margin : 0;
+		padding : 0;
+		height : 0
+	}
+	.container.paginations{
+		margin-top : 0px !important;
+	}
+	.pagination{
+		float : right;
+		margin : 0;
+	}
+	.curpage{
+		margin-top: -23px;
+		font-size: 15px;
+		font-weight: 600;
+		font-family: monospace;
+		margin-left: 10px
+	}
+	#Rptshow{
+		margin-top: 10px;
+	}
+	.pagination>li>a, .pagination>li>span{
+		float :none !important;
+	}
+	.navbar {
+		display : none;
+	}
+}
+/*****************************************************************/

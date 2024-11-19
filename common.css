@@ -1,0 +1,421 @@
+
+/********************** containers ********************************/
+.container-fluid{
+	margin:0;
+	padding:0;
+	overflow-x : hidden;
+}
+
+#page .container{
+	margin-top : 80px;
+}
+
+
+.navbar-inverse{
+	border-radius : 0px;
+	position : fixed;
+	width : 100%;
+	z-index: 10;
+}
+
+input {
+	font-weight : bold;
+}
+
+/*************************  navbar      *****************************/
+
+ul#myNavbar {
+    width: 104%;
+}
+
+.navbar-brand .fa>img {
+	height : 30px;
+}
+
+/*************************  searchbar  *****************************/
+#search {
+	width: 92%;
+	/*left : 1;*/
+	box-sizing: border-box;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+	font-size: 14px;
+	background-color: white;
+	padding: 5px 20px 5px 40px;
+	position:absolute;
+	z-index:2;
+	max-height:500px;
+	height: auto;
+	overflow-y:auto;
+	top : -15px;
+}
+#searchlist{
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+#searchlist li{
+	padding:5px;
+	width:100%;
+	display: inline-flex;
+}
+#searchlist li:hover{
+	background: #0d98e8;
+	color:white;
+}
+#searchlist li #field1 {
+	text-align : right;
+	width : 7%;
+}
+#searchlist li #field2 {
+	text-align : left
+}
+/*****************************************************************/
+
+/*************************  combobox  *****************************/
+select {
+	-webkit-appearance: none;  /*REMOVES DEFAULT CHROME & SAFARI STYLE*/
+	-moz-appearance: none;  /*REMOVES DEFAULT FIREFOX STYLE*/
+	color: #fff;
+	border-left: 2px solid #0d98e8;
+ 	border-top: 2px solid #0d98e8;
+ 	border-right: 2px solid #0d98e8;
+ 	border-bottom: 2px solid #0d98e8;
+	border-radius: 0px 4px 4px 0px;
+	-webkit-border-radius: 4px 4px 4px 4px;
+	font-size: 13px;
+	/* padding For Mozilla*/ 
+	padding: 8px 0px 8px 2px;
+	/* padding for chrome */
+	-webkit-padding-before:8px;
+	-webkit-padding-end:0px;
+	-webkit-padding-after:8px !important;
+	-webkit-padding-start:5px;
+	width: 70%;
+	cursor: pointer;
+	background: #0d98e8 url(https://cdn1.iconfinder.com/data/icons/universal-icons-set-for-web-and-mobile/100/controls_0-12-512.png) no-repeat right center;
+	background-size: 40px 37px; /*TO ACCOUNT FOR @2X IMAGE FOR RETINA */
+	box-sizing: border-box;
+	outline : none;
+}
+
+option {
+	background-color:#fff;
+	color:black;
+}
+select::-ms-expand{
+	display:none;
+}
+/*****************************************************************/
+
+/*************************  Buttons  *****************************/
+.btn-info{
+	width : 19%;
+	height: 38px ;
+}
+
+.btn {
+	outline : none !important;
+}
+/*****************************************************************/
+
+
+/*************************  error &success  **********************/
+.success{
+	color : white;
+	font-weight : bold;
+	font-size : 14px;
+}
+.error{
+	color : white;
+	font-weight : bold;
+	font-size : 14px;
+}
+.msganimate{
+	position: fixed;
+	/*background: #252B1E;*/
+	margin: auto;
+	width : 92%;
+	animation : animates 0.3s linear forwards;
+	box-shadow: 1px 1px 5px #252B1E;
+	border: none;
+	top : 0;
+	z-index: 1;
+	font-family: Georgia;
+}
+
+.msglogin{
+	position: fixed;
+	margin: auto;
+	z-index : 10;
+	animation : animates 0.3s linear forwards;
+	box-shadow: 1px 1px 5px #252B1E;
+	border: none;
+	padding : 0;
+	top: 25px;
+	left: 13%;
+	width: 74% !important;
+	font-family: Georgia;
+}
+
+.msganimate .success{
+	background: green;
+	padding: 5px;
+}
+.msganimate .error{
+	background: red;
+	padding: 5px;
+}
+
+.msglogin .success{
+	background: green;
+	padding: 5px;
+}
+.msglogin .error{
+	background: red;
+	padding: 5px;
+}
+
+
+.far{
+	font-weight : bold;
+}
+
+@keyframes animates{
+	100% {
+			top  : 60px;
+	}
+}
+
+.successmsg{
+	color : green;
+	font-weight : bold;
+	font-size : 14px;
+}
+.errormsg{
+	color : red;
+	font-weight : bold;
+	font-size : 14px;
+}
+/*****************************************************************/
+
+/*************************  text-area      **********************/
+textarea {
+	width: 100%;
+}
+/*****************************************************************/
+
+/*************************  modal-amt      **********************/
+#modalamt {
+	font-size: 20px;
+	font-weight: 800;
+	display: inline;
+}
+.modal-header{
+	text-align: center;
+}
+
+.modal-dialog{
+	border-radius : 6px
+}
+
+#quicktransaction{
+	font-family: serif;
+	font-size: 13px;
+	font-weight : 600;
+}
+#modalimage{
+	width : 100% ;
+}
+a.left.carousel-control,a.right.carousel-control {
+    height: fit-content;
+	top: 50%;
+}
+/*****************************************************************/
+
+/*************************** fyr text ****************************/
+.h3, h3 {
+	font-size: 24px;
+	padding: 10px 0 10px 10px;
+	background: #def2de;
+	border-radius: 5px 5px 5px 5px;
+	font-weight: 600;
+	font-family: serif;
+}
+#yeardesc{
+	font-size: 18px;
+	font-family: serif;
+	font-weight: 500;
+}
+#yr{
+	font-weight: 700;
+	color: green;
+}
+/*****************************************************************/
+
+/**************************** Loader  ****************************/
+.loader{
+	position: absolute;
+	z-index: 999999;
+	/*top: 80%;
+	left: 45%;*/
+	top: 80%;
+	left: 35%;
+}
+
+.loader>img {
+	position: fixed;
+	top: 80%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.dashloader{
+	position: absolute;
+	z-index: 999999;
+	/*top: 80%;
+	left: 45%;*/
+	top: 30%;
+	left: 35%;
+}
+
+.dashloader>img {
+	position: fixed;
+	top: 40%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+
+/*.menuloader{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 999999;
+	background-color : aliceblue;
+}*/
+/*.menuloader>img{
+	position: absolute;
+	top: 60%;
+	left: 35%;
+	border-bottom : 3px solid darkolivegreen;
+}*/
+#loading{
+	font-size: 18px;
+	font-weight: 700;
+	position: absolute;
+	top: 50%;
+	left: 36%;
+	font-family: monospace;
+}
+.transloader{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 999999;
+	background-color : rgba(0,0,0,0.7);
+}
+.transloader>img{
+	height: 8%;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+/*****************************************************************/
+
+
+/**************************** css loader *************************/
+	.menuloader{
+		margin :0 ;
+		padding : 0;
+		align-items : center;
+		display : flex ;
+		justify-content : center;
+		font-family : sans-serif;
+		z-index: 999999;
+		background-color : #fff;
+		position: absolute;
+		height: 100%;
+		width: 100%;
+	}
+	.menuloader .cssloader{
+		position : relative;
+		font-size : 1.5em;
+		background : #fff;
+		color : #000;
+		text-transform : uppercase;
+		font-weight : bold;
+		letter-spacing : 0.5em;
+		padding : 5px;
+	}
+	.menuloader .cssloader span{
+		color : #fff;
+		mix-blend-mode : difference;
+	}
+	.cssloader:before{
+		content : '';
+		position : absolute;
+		top : 0;
+		left : 0;
+		width : 60px;
+		height : 100%;
+		background : #000;
+		animation : animate 2s linear infinite;
+	}
+	@keyframes animate{
+		0%{
+			left : 0;
+		}
+		50%{
+			left : calc(100% - 70px);
+		}
+		100%{
+			left : 0;
+		}
+	}
+/*****************************************************************/
+/********* Toggle ************************************************/
+#page,#landing,#transaction{
+	transition: margin-left .5s;
+}
+
+/****************************************************************/
+/****** transaction Choose file ********************************/
+.images {
+	width : 70%;
+}
+.images::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.images::before {
+  content: 'Select File';
+  display: inline-block;
+  background: #0d98e8;
+  color : white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight : 500;
+}
+.images:hover::before {
+  border-color: black;
+}
+.images:active::before {
+  background: #0d98e8;
+  border: 1px solid #0d98e8 !important;
+}
+.images:focus{
+	outline : 5px auto #0d98e8 !important;
+}
+/***************************************************************/

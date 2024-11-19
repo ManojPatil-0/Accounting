@@ -1,0 +1,121 @@
+<?php include_once('common.php')?>
+<script type = 'text/javascript' src = 'common.js' ></script> 
+
+<div class = "container">
+	<div class = "acdetail">
+		<input type="text" name="accd" id="accd" class="form-control"  style= "display:none;">
+		<div class="form-group">
+			<label for="acname">Account Name :</label>
+			<input type="text" name="acname" id="acname" class="form-control" autocomplete="off" onfocus = 'SetColor(this.id)'  onblur = 'ReleaseColor(this.id)' onkeyup = 'Search(this.id,"acmaster","ACCD","ACNAME")'  >
+		</div>
+		<div class = "search" id = "search"></div>
+		<div class="form-group">
+			<label for="acopen">Account Opening :</label>
+			<input type="number" name ="acopen" id="acopen" class="form-control" autocomplete="off" onfocus = 'SetColor(this.id)'  onblur = 'ReleaseColor(this.id)'>
+		</div>
+		<label for="crdr">Debit/Credit :</label></br>
+		<select name="crdr" id = "crdr" class="combo" >
+			<option value = "D">Debit</option>
+			<option value = "C">Credit</option>
+		</select></br></br>
+		<label for="yn">Opening Yes/No :</label></br>
+		<select name="yn" id = "yn" class="combo" >
+			<option value = "Y">Yes</option>
+			<option value = "N">No</option>
+		</select></br></br>
+		<label for="yn">Close A/c Yes/No :</label></br>
+		<select name="cyn" id = "cyn" class="combo" >
+			<option value = "N">No</option>
+			<option value = "Y">Yes</option>
+		</select></br></br>
+		<label for="yn">In DashBoard Yes/No :</label></br>
+		<select name="dyn" id = "dyn" class="combo" >
+			<option value = "Y">Yes</option>
+			<option value = "N">No</option>
+		</select></br></br></br>
+		<button type="button" name="addentry" value="add" id="add" class="btn btn-info" onclick = 'BtnControl(this.id,"acname","acdetail");MaxNumber("accd","acmaster","ACCD")'>Add</button>
+		<button type="button" name="saveentry" value="Save" id="save" class="btn btn-info" >Save</button> 
+		<button type="button" name="editentry" value="Edit" id="edit" class="btn btn-info" onclick = 'BtnControl(this.id,"acname","acdetail")' >Edit</button>
+		<button type="button" name="cancel" value="Cancel" id="cancel" class="btn btn-info" onclick = 'ClearControl("acdetail");BtnControl(this.id,"","acdetail")'>Cancel</button>
+		<button type="button" name="deleteentry" value="Delete" id="delete" class="btn btn-info" onclick = 'BtnControl(this.id,"acmaster","acdetail")'>delete</button>
+		<div id = "msg"></div>
+	</div>
+</div>
+
+<script type= "text/javascript">
+var acname,opening,crdr,yn,mode,id,closeyn,dashyn;
+$(document).ready(function(){
+	BtnControl('load','','acdetail')
+	
+	//on save click call button function and take data
+	$("#save").click(function (){
+		//once save is clicked make search visible so user can click on edit and search again without refreshing
+		//$("#search").text('');
+		//$("#search").show();
+		id = $("#accd").val();
+		acname = $("#acname").val();
+		opening = $("#acopen").val();
+		crdr = $("#crdr").val();
+		yn = $("#yn").val();
+		closeyn = $("#cyn").val();
+		closeyn = $("#cyn").val();
+		dashyn = $("#dyn").val();
+		SaveFunction('save','acname','acdetail');
+	})
+
+	//hide search when clicked anywhere
+	$("body").click(function(){
+		$("#search").hide();
+	})
+})
+function SaveFunction(idname,setfocus ,edclass){
+	mode = entrymode
+	//show loader
+	$(".transloader").show();
+	switch(idname){
+		case 'save':
+			$("#add").attr('disabled',false)
+			$("#save").attr('disabled',true)
+			$("#edit").attr('disabled',false)
+			$("#cancel").attr('disabled',false)
+			$("#delete").attr('disabled',true)
+			$("#add").focus();
+			ClearControl(edclass);
+			$("#msg").show();
+			$("#msg").html('');
+			//make ajax call to insert data
+			$.ajax({
+				type : "POST",
+				url : "entrymode.php",
+				dataType : "text",
+				data : {
+							page : "acmaster",
+							entrymode : mode,
+							accd : id,
+							acname : acname,
+							opening : opening,
+							crdr : crdr,
+							yn :yn,
+							cyn : closeyn,
+							dyn : dashyn
+						},
+				success : function(response){
+					//hide loader
+					$(".transloader").hide();
+					$('#msg').html(response)
+					$('#msg').addClass("msganimate")
+					$("#msg").fadeOut(3000);
+					setTimeout(function() {
+						$("#msg").removeClass("msganimate");
+					}, 3000);
+					entrymode= "";
+				},
+				error : function(textStatus, errorThrown){
+					alert('error')
+					$(".transloader").hide();
+				}
+			})
+			break
+	}
+}
+</script>

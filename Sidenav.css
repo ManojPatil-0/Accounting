@@ -1,0 +1,117 @@
+.sidenav {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 50px;
+	left: 0;
+	background-color: #111;
+	overflow-x: hidden;
+	transition: 0.3s;
+
+    padding-top: 60px;
+	opacity : 0.95;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	z-index : 999999999999;
+	position : fixed;
+}
+
+
+.navbar-inverse {
+	box-shadow: 0px 1px 8px black;
+}
+
+.sidenav a {
+	padding: 8px 8px 8px 22px;
+	text-decoration: none;
+	font-size: 18px;
+	color: #818181;
+	display: block;
+	transition: 0.2s;
+}
+
+.sidenav a i{
+	padding-left : 10px;
+}
+
+.sidenav a strong{
+	position: absolute;
+	left: 70px
+}
+.sidenav a strong:hover {
+	color: #337ab7;
+}
+
+.sidenav .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+	color : white;
+}
+#button{
+	padding-left: 15px;
+	color: #9d9d9d;
+	font-size:34px;
+	cursor: pointer;
+}
+#menu{
+	font-size: 25px;
+	color: #337ab7;
+	text-decoration: underline;
+	font-weight: 900;
+	margin-top: -50px;
+}
+
+.sidenav hr {
+	margin: 0px;
+	border: 0;
+	padding : 5px;
+	border-top: 1px solid #818181;
+	opacity : 0.6;
+}
+@media screen and (max-height: 450px) {
+	.sidenav {padding-top: 15px;}
+	.sidenav a {font-size: 18px;}
+}
+
+/************************ button animation *********************/
+.icon-bar {
+	width : 22px;
+	transition : all 0.2s;
+}
+.topbar {
+	transform : rotate(45deg);
+	transform-origin : 10% 10%;
+}
+.botbar {
+	transform : rotate(-45deg);
+	transform-origin : 10% 90%;
+}
+.midbar{
+	opacity : 0;
+}
+.navbar-toggle{
+	float : none;
+	margin-left: 10px;
+}
+.navbar-inverse .navbar-toggle{
+	border-color : transparent;
+}
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover{
+	background-color: transparent;
+}
+/****************************************************************/
+
+/************************ menu Active Class *********************/
+.menuActive{
+	background-color : #337ab7;
+	color : Black !important;
+	margin-bottom: 10px;
+}
+
+a.menuActive hr{
+	display : none;
+}
+/****************************************************************/
