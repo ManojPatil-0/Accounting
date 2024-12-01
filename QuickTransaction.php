@@ -40,7 +40,7 @@ if ( isset($_GET['transid']) ){
 			$tnarr = $rows['NARR']; 
 			$imgarr = $rows['IMGJSON'];
 			if ($imgarr != '{}'){
-				$timagename = count($imgarr).' Image(s)';
+				$timagename = count(explode(",",$imgarr)).' Image(s)';
 			}else{
 				$timagename = 'No Image';
 			}

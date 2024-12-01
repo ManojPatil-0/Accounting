@@ -57,7 +57,7 @@ echo '<div class="modal-dialog" style = "background-color:white">';
 			echo '<strong>Narration :</strong>    '.$narr.'</br>';
 			if ( json_decode($imagejson,true)){
 				echo '</br>';
-				echo $imagejson;
+				//echo $imagejson;
 				$imgarr = json_decode($imagejson);
 				$count = count($imgarr);
 				//cachebuster date is added to avoid caching of image 

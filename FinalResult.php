@@ -83,7 +83,7 @@ function TransFill(){
 			$response[6] = $rows['NARR'];
 			$imgarr = $rows['IMGJSON'];
 			if ($imgarr != '{}'){
-				$imgstatus = count($imgarr);
+				$imgstatus = count(explode(",",$imgarr));
 			}else{
 				$imgstatus = 'No';
 			}

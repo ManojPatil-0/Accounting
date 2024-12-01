@@ -59,7 +59,7 @@ if ( $user == "" ||  $fyr == "" ){   //if any of one is not set
 						<strong>Note :</strong>
 						<ul style="list-style-type: square;">
 							<li>For Web Version <a id = "link" href = "#" onclick="CopyLink()">
-							<span id = "linkval" style = "display:none;" >https://accountingbymanoj.000webhostapp.com/</span> Copy Link </a> And Open The App In Chrome Browser.</li>
+							<span id = "linkval" style = "display:none;" >http://accountingbymanoj.lovestoblog.com/</span> Copy Link </a> And Open The App In Chrome Browser.</li>
 							<li>Last Updated On 10/01/2024.</li>
 							<li>Keep Updated By Clearing App Data, Goto Mobile Setting -> Apps ->Accounting -> Clear Data.</li>
 							<li>Click On Dashboard Account For Detail Report.</li>
