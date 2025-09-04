@@ -37,7 +37,7 @@ $pichartamt = 0;
 $barchartamt = 0;
 $i = 0;
 
-$sqlqry = "SELECT CATNAME FROM category WHERE ACTIVE = 'Y' ORDER BY CATNAME";
+$sqlqry = "SELECT CATNAME FROM category WHERE ACTIVE = 'Y' and UID = $u_id ORDER BY CATNAME";
 $connect = mysqli_query($con , $sqlqry) ;
 if ( mysqli_num_rows($connect) > 0 ) {
 	while ( $rows = mysqli_fetch_array($connect,MYSQLI_ASSOC) ){
@@ -88,6 +88,8 @@ $sqlqry = "
 		WHERE T.UID = $u_id AND T.TDATE BETWEEN '$prevfirstday' AND '$prevlastday' AND T.CATID = 0
 		HAVING SUM(T.AMT) > 0
 		ORDER BY Catname";
+
+		//echo $sqlqry;
 		
 $connect = mysqli_query($con , $sqlqry) ;
 if ( mysqli_num_rows($connect) > 0 ) {
@@ -120,7 +122,6 @@ sort($data_point_2);
 
 
 $reponsearr = array("doughnout"=>$pichartdata,"bar_1"=>$data_point,"bar_2"=>$data_point_2,"amount"=>$amount,"year"=>$financeyear);
-
 //reponse as JSON object
 echo  json_encode($reponsearr, JSON_NUMERIC_CHECK);
 ?> 
