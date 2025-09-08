@@ -13,7 +13,9 @@ if ( isset($_POST['head']) ){
 if ( isset($_SESSION['uid']) &&  isset ($_SESSION['fyr'])) {
 
 	switch($header){
-		case "Report":    
+		case "Report":   
+		case "Category Rpt" :
+		case "Narration Rpt" :
 		ob_start();
 		include "Report.php";
 		$response = ob_get_clean();

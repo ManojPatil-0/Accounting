@@ -5,6 +5,7 @@ if (isset( $_SESSION['uid'] )){
 	$fyr = $_SESSION['fyr'];
 	$startdate = $_SESSION['sdate'];
 	$enddate = $_SESSION['edate'];
+	$reporttype = $_COOKIE['reporttype'];
 }else{
 	$id = 0;
 }
@@ -36,12 +37,30 @@ if (isset( $_SESSION['uid'] )){
 		</div>
 		<input type="radio" name="opt" id="all" value = 'A' class="form-control" style = "display:none"> 
 		<input type="radio" name="opt" id="select" value = 'S' class="form-control" style = "display:none">
-		<label for="account">Account Name :</label></br>
-		<select name="account" id = "account" class="cmb" >
-			<?php  
-				FillCombo('acmaster','ACCD','ACNAME','CLOSEAC = "N" AND uid ='.$id.' Order By ACNAME');
+		<label for="account">
+			<?php
+				if($reporttype === "Report"){
+					echo "Acount Name";
+				}else if ($reporttype === "Category Rpt"){
+					echo "Category Name";
+				}else{
+					echo "Enter Narration";
+				}
 			?>
-		</select>&nbsp&nbsp&nbsp
+		</label></br>
+		<?php if ($reporttype === "Narration Rpt"){ ?>
+			<input type="text" name ="narr" id="narr" class="form-control" placeholder = "Enter Narration Key Word" autocomplete="off" onfocus = 'SetColor(this.id)'  onblur = 'ReleaseColor(this.id)' style = "width:70%;float:left;height:40px">&nbsp&nbsp&nbsp
+		<?php }else{ ?>
+			<select name="account" id = "account" class="cmb" >
+				<?php
+					if ($reporttype === "Report"){
+						FillCombo('acmaster','ACCD','ACNAME','CLOSEAC = "N" AND uid ='.$id.' Order By ACNAME');
+					}else{
+						FillCombo('category','CATID','CATNAME','uid ='.$id.' AND ACTIVE = "Y" Order By CATNAME');
+					}  
+				?>
+			</select>&nbsp&nbsp&nbsp
+		<?php } ?>
 		<button type="button" name="show" value="Show" id="show" class="btn btn-info"  style = "height : 40px;width : 25%"> Search </button></br></br>
 	</div>
 </div>
@@ -70,7 +89,7 @@ $(document).ready( function(){
 		}
 		GetTable(Cookies('fromdt'),Cookies('todt'),Cookies('option'),Cookies('account'));
 	}
-	var fdate,tdate,cmb,opt,partycd
+	var fdate,tdate,cmb,opt,partycd,nartxt
 	$("#all").click(function(){
 		$("#account").attr("disabled",true)
 	})
@@ -88,12 +107,13 @@ $(document).ready( function(){
 			opt = "P";
 			cmb = $("#account").val();
 		}
+		nartxt = $("#narr").val();
 		//set all required Cookies
 		Cookies.set('fromdt',fdate);
 		Cookies.set('todt',tdate);
 		Cookies.set('option',opt);
 		Cookies.set('account',cmb);
-		GetTable(fdate,tdate,opt,cmb);
+		GetTable(fdate,tdate,opt,cmb,nartxt);
 	})
 
 	//get todays date if TODAY Checkbox is checked
@@ -146,10 +166,12 @@ $(document).ready( function(){
 		}
 	});
 
-function GetTable(fdate,tdate,opt,cmb){
+function GetTable(fdate,tdate,opt,cmb,nar){
+	var type;
 		partycd = cmb
 		$(".loader").show();
-		$('.table-responsive').hide()
+		$('.table-responsive').hide();
+		type = '<?php echo $reporttype; ?>'
 	//ajax call to get the report
 	$.ajax({
 		type : "POST",
@@ -159,7 +181,9 @@ function GetTable(fdate,tdate,opt,cmb){
 				fromdt : fdate,
 				todt : tdate,
 				cmb : cmb,
-				opt : opt
+				opt : opt,
+				type : type,
+				nar : nar
 			},
 		success : function(response){
 			$("#Rptshow").html(response);

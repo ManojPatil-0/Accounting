@@ -42,8 +42,10 @@ include_once('common.php');
 		<!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
 			<a href="landing.php" id = "menu">Menu</a>
 			<a href="landing.php" class = "menuActive"><i class="fas fa-home"></i>&nbsp&nbsp <strong>Home</strong><hr></a>
-			<a href="#"><i class="fa-solid fa-file-invoice fa-beat"></i>&nbsp&nbsp <strong>Report</strong><hr></a>
 			<a href="#"><i class="fa-solid fa-chart-line fa-bounce"></i>&nbsp&nbsp <strong>Charts</strong><hr></a>
+			<a href="#"><i class="fa-solid fa-file-invoice fa-beat"></i>&nbsp&nbsp <strong>Report</strong><hr></a>
+			<a href="#"><i class="fa-solid fa-file-invoice"></i>&nbsp&nbsp <strong>Category Rpt</strong><hr></a>
+			<a href="#"><i class="fa-solid fa-file-invoice"></i>&nbsp&nbsp <strong>Narration Rpt</strong><hr></a>
 			<a href="#"><i class="fas fa-handshake"></i>&nbsp <strong>Transaction</strong><hr></a>
 			<a href="#"><i class="fas fa-user-circle"></i>&nbsp&nbsp <strong>Account Master</strong><hr></a>
 			<a href="#"><i class="fa fa-list-alt"></i>&nbsp&nbsp <strong>Category Master</strong><hr></a>
@@ -76,12 +78,13 @@ include_once('common.php');
 <script type = "text/javascript">
 var curpage;
 $(document).ready(function(){
-	var head,navwidth;
+	var head,navwidth,reporttype;
 	//Get The Current Page
 	curpage = document.location.href.match(/[^\/]+$/)[0];
 	curpage = curpage.charAt(0);
 	$("#mySidenav a").click(function(){
 		head = $(this).find("strong").text();
+		document.cookie = "reporttype = "+ head ;
 		closeNav();
 		if ( head != 'Home' ) {
 			GetPage(head);

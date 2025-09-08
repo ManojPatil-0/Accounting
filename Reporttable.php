@@ -25,8 +25,10 @@ global $rptcon2;
 if ( isset( $_POST['fromdt']) ) {
 	$frdt = $_POST['fromdt'];
 	$todt = $_POST['todt'];
-	$cmb = $_POST['cmb'];
+	$cmb = isset($_POST['cmb']) ? $_POST['cmb']: 0;
 	$opt = $_POST['opt'];
+	$reporttype = $_POST['type'];
+	$nar = isset($_POST['nar']) ? $_POST['nar'] : "";
 }
 
 $sqlqry = "";
@@ -36,13 +38,12 @@ $connect = "";
 
 $sqlqr = "SELECT ACCD FROM acmaster WHERE UID = $uid";
 $conn = mysqli_query($con , $sqlqr);
-
 /*while ( $m = mysqli_fetch_array($conn,MYSQLI_ASSOC) ){
 	$partyid = $m['ACCD'];*/
 
 	//$sqlqry = "call REPORT($uid,'$fyr','$frdt', '$todt','P',$cmb)";
-	
-	$sqlqry = "
+	if ($reporttype === "Report"){
+		$sqlqry = "
 				SELECT T.TID AS SRNO , T.TDATE AS DATE , A.ACCD ,A.ACNAME AS ACCOUNT, A1.ACNAME AS SUBACCOUNT,T.NARR AS NARRATION,
 				(CASE WHEN T.CRDR = 'D' AND T.UID = $uid THEN T.AMT ELSE 0 END) AS DEBIT,
 				(CASE WHEN T.CRDR = 'C' AND T.UID = $uid THEN T.AMT ELSE 0 END) AS CREDIT,
@@ -86,13 +87,27 @@ $conn = mysqli_query($con , $sqlqr);
 
 				ORDER BY ACCOUNT,DATE,SRNO;
 	";
+	}else{
+		$filter = $reporttype === "Category Rpt" ? "CATID  =".$cmb  : "NARR LIKE '%$nar%' " ;
+		$sqlqry = "
+				SELECT T.TID AS SRNO , T.TDATE AS DATE , A.ACCD ,A.ACNAME AS ACCOUNT, A1.ACNAME AS SUBACCOUNT,T.NARR AS NARRATION,
+				(CASE WHEN T.CRDR = 'D' AND T.UID = $uid THEN T.AMT ELSE 0 END) AS DEBIT,
+				(CASE WHEN T.CRDR = 'C' AND T.UID = $uid THEN T.AMT ELSE 0 END) AS CREDIT,
+				0 AS BALANCE,T.CATID AS CATID
+				FROM transactions AS T 
+				INNER JOIN acmaster AS A ON A.ACCD = T.PARTY1 AND A.UID = T.UID
+				INNER JOIN acmaster AS A1 ON A1.ACCD = T.PARTY2 AND A1.UID = T.UID
+				WHERE  T.UID = $uid AND T.FYR = '$fyr' AND (T.TDATE BETWEEN '$frdt' AND '$todt' ) AND $filter
+	";
+	}
+	//echo $sqlqry;
 	$connect = mysqli_query($con , $sqlqry) ;
 	$grandcr = $granddr = 0;
 	if ( mysqli_num_rows($connect) > 0 ){
 		while ( $rows = mysqli_fetch_array($connect,MYSQLI_ASSOC) ){
 		    $transid = $rows['SRNO'];
 			$date = $rows['DATE'];
-			$accd = $rows['ACCD'];
+			$accd = $reporttype === "Report" ? $rows['ACCD'] : $rows['CATID'];
 			$ac = $rows['ACCOUNT'];
 			$subac = $rows['SUBACCOUNT'];
 			$cr = $rows['CREDIT'];
@@ -160,7 +175,7 @@ $(document).ready(function(){
 		}else{
 			$('#1').addClass('active')
 		}
-	var varpage,accd,varbuttons,varpages;
+	var varpage,accd,varbuttons,varpages,reporttype;
 	varbuttons = "<?php echo $pagebuttons; ?>"
 	varpages = "<?php echo $pages; ?>"
 	Cookies.set('pages',varpages)
@@ -193,7 +208,7 @@ $(document).ready(function(){
 		pagePrevNumber(varpage,varpages,varfirstli,varlastli);
 		//shift active calass
 		swithActiveClass(varpage,varfirstli,varlastli)
-		accd = $(this).attr('data');
+		accd = rpttype === "Narration Rpt" ? "<?php echo $nar?>" : $(this).attr('data');
 		Cookies.set('pageno',varpage); //set page cooke
 		pagination(varpage,accd);
 	})
@@ -219,7 +234,7 @@ $(document).ready(function(){
 		//shift active calass
 		//shift active class to cookie page if its set
 		swithActiveClass(varpage,varfirstli,varlastli)
-		accd = $(this).attr('data');
+		accd = rpttype === "Narration Rpt" ? "<?php echo $nar?>" : $(this).attr('data');
 		Cookies.set('pageno',varpage); //set page cooke
 		pagination(varpage,accd);
 	})
@@ -232,7 +247,7 @@ $(document).ready(function(){
 		varlastli = $(".pagenum").last().attr('id')
 		//set only last li Cookie
 		Cookies.set('last',varlastli)
-		accd = $(this).attr('data');
+		accd = rpttype === "Narration Rpt" ? "<?php echo $nar?>" : $(this).attr('data');
 		FirstButClick(varlastli);
 		$('#1').addClass('active').siblings().removeClass("active");
 		Cookies.set('pageno',1); //set page cooke
@@ -246,7 +261,7 @@ $(document).ready(function(){
 		varfirstli = $(".pagenum").first().attr('id')
 		//set only first li Cookie
 		Cookies.set('first',varfirstli)
-		accd = $(this).attr('data');
+		accd = rpttype === "Narration Rpt" ? "<?php echo $nar?>" : $(this).attr('data');
 		LastButClick(varfirstli,varpages);
 		$('#'+varpages).addClass('active').siblings().removeClass("active");
 		Cookies.set('pageno',varpages); //set page cooke with no of pages, as No of pages Digit is last page
@@ -267,11 +282,14 @@ $(document).ready(function(){
 		Cookies.set('first',varfirstli)
 		Cookies.set('last',varlastli)
 		varpage = $(this).attr('class');
-		accd = $(this).attr('data');
+		accd = rpttype === "Narration Rpt" ? "<?php echo $nar?>" : $(this).attr('data');
 		Cookies.set('pageno',varpage); //set page cooke
+		
 		pagination(varpage,accd);
 	})
 	//if the page and account cookies set load perticular page elseload first page
+	var rpttype = '<?php echo $reporttype?>';
+	var filter = rpttype === "Narration Rpt" ? "<?php echo $nar?>" : partycd
 	if ( Cookies('pageno') && Cookies('account') ) {
 		pagination(Cookies('pageno'),Cookies('account')) //Cookies('account') set in Report.php
 		//mover the page numbers based on the flags and calling appropriate move forward backward funtions
@@ -284,7 +302,7 @@ $(document).ready(function(){
 		}
 		$('#'+Cookies('pageno')).addClass('active').siblings().removeClass("active");
 	}else{
-		pagination(1,partycd); //partycd variable is set in getTable() in Report.php
+		pagination(1,filter); //partycd variable is set in getTable() in Report.php
 	}
 })
 
@@ -390,7 +408,8 @@ function pagination(page,cmb){
 		dataType : "text",
 		data : {
 				page : page,
-				cmb : cmb
+				cmb : cmb,
+				type : '<?php echo $reporttype ?>'
 			},
 		success : function(response){
 			$(".Rpt").html(response);
