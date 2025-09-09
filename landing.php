@@ -103,6 +103,7 @@ function loadReport(acname){
 	Cookies.set('todt',edate);
 	Cookies.set('option',0);
 	Cookies.set('account',acname);
+	document.cookie = "reporttype = Report"; //set cookie for dashboard again
 	//load report based on cookies
 	GetPage('Report');
 }
