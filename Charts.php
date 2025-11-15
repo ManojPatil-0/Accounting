@@ -15,18 +15,30 @@ $monthmax = date("Y",strtotime($enddate)).'-'.date("m",strtotime($enddate));
 		<div class="controls" >
 			<div id="filter">
 				<label for="month" class="radio-inline">
-					<input type="radio" id="month" name="select" value="Month" checked>Month
+					<input type="radio" id="month" name="select" value="Month" checked onclick = 'getSelectionData()'; >&nbspMonth
 				</label>
 				<label for="year" class="radio-inline">
-					<input type="radio" id="year" name="select" value="Year">Year
+					<input type="radio" id="year" name="select" value="Year" onclick = 'getSelectionData()'; >&nbspYear
+				</label>
+				<label for="compare" class="radio-inline">
+					<input type="checkbox" id="compare" name="select" value="compare"
+					style = "vertical-align:text-bottom;height:18px;width:18px"
+					title = "Use this option to comapare in Bar Chart, doughnout will remain Same."
+					onclick = 'getSelectionData()'; >&nbsp Compare
 				</label><br>
 			</div>
-			<input type="month" id="chartmonth" name="chartmonth" class="form-control" 
-					value= <?php echo date("Y")."-".date("m"); ?>
-					min = <?php  echo $monthmin; ?> max = <?php echo $monthmax; ?>
-					style = "width:50%;float:left"
-			>
-			<button type="button" name="show" value="Show" id="show" class="btn btn-info"  style = "width : 35%;float:right" onclick="getData()"> Filter </button>
+			<div id = "chartfilter">
+				<div id ="selcalendar">
+					<input type="month" id="chartmonth" name="chartmonth" class="form-control" 
+						value= <?php echo date("Y")."-".date("m"); ?>
+						min = <?php  echo $monthmin; ?> max = <?php echo $monthmax; ?>
+						style = "width:50%;float:left"
+					/>
+				</div>
+				<div id ="calbutton">
+					<button type="button" name="show" value="Show" id="show" class="btn btn-info"  style = "width : 25%;float:right;height:35px" onclick="getData()"> Filter </button>
+                </div>
+			</div>
 		</div>
 	</div>
 	<div id="chartContainer" style="height:100%">
@@ -41,23 +53,68 @@ $monthmax = date("Y",strtotime($enddate)).'-'.date("m",strtotime($enddate));
 //jquery to load ---
 $(document).ready(function(){
 	let choice;
-	let month = (document.getElementById("chartmonth").value);
+	let curmonth = (document.getElementById("chartmonth").value);
 	const filterdate = new Date(month)
 	year = filterdate.getFullYear();
-	makeAjaxCall(month,year,'M');
+	makeAjaxCall(curmonth,year,curmonth,year,'M',false);
 });
+
+//get selection data------
+function getSelectionData(selval){
+	const iscompare = document.getElementById('compare').checked  ? true : false;
+	selval = document.getElementById('month').checked ? "Month" : "Year"; 
+	if(!document.getElementById('compare').checked){
+		$('#compclass').toggleClass('rotated');
+	}
+	selDataAjaxCall( selval, iscompare );
+}
+
+//select data ajax call
+function selDataAjaxCall( selval, iscompare ){
+	$.ajax({
+		type : "POST",
+		url : "entrymode.php",
+		dataType : "text",
+		data : {
+				page : 'chartfilter',
+				valueselected : selval,
+				iscompare : iscompare
+				},
+		success : function(response){
+			$("#selcalendar").html(response);
+		},
+		error : function(xhr,textStatus,errorThrown){
+			//alert(xhr.responseText);\
+			alert("Server is Down, Try Again Later!")
+			location.reload(true);
+		}
+	})	
+}
+
 //-------------------
 function getData(){
-	let choice;
-	let month = (document.getElementById("chartmonth").value);
-	const filterdate = new Date(month)
-	//month = filterdate.getMonth()+1;
-	year = filterdate.getFullYear();
-	( document.getElementById('month').checked ) ? choice = "M" : choice = "Y";
-	makeAjaxCall(month,year,choice);		
+	let choice,year,month,compyear,compmonth,iscompare;
+	iscompare = document.getElementById("compare").checked;
+	const ismonthsel = (document.getElementById("month"))
+	if (ismonthsel.checked){
+		month = (document.getElementById("chartmonth").value);
+		year = "";
+		if ( iscompare ){
+			compmonth = (document.getElementById("chartcompmonth").value);
+			compyear = "";
+		}
+	}else{
+		year = $("#fyr").val();
+		month = new Date().getMonth();
+		if ( iscompare ){
+			compyear = (document.getElementById("compfyr").value);
+		}
+	}
+	choice = ( document.getElementById('month').checked ) ?"M" : "Y";
+	makeAjaxCall(month,year,compmonth,compyear,choice,iscompare);		
 }
 //call to chartdata.php
-function makeAjaxCall(selmonth,selyear,choice){
+function makeAjaxCall(selmonth,selyear,compmonth,compyear,choice,iscompare){
 	const xhm = new XMLHttpRequest();
 	xhm.onreadystatechange = () => {
 		if (xhm.readyState === 4 && xhm.status === 200 ){
@@ -72,7 +129,7 @@ function makeAjaxCall(selmonth,selyear,choice){
 	};
 	xhm.open("POST","chartdata.php",false);
 	xhm.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhm.send("month="+selmonth+"&year="+selyear+"&choice="+choice);
+	xhm.send("month="+selmonth+"&year="+selyear+"&compmonth="+compmonth+"&compyear="+compyear+"&choice="+choice+"&iscompare="+iscompare);
 }
 
 var doughnutChart = (c_data) => {
@@ -96,15 +153,24 @@ var doughnutChart = (c_data) => {
 chart.render();
 }
 
-var multiBarChart = (data1,data2,amount1,amount2,curyear,Prevyear) =>{	
-const monthnames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const month = (document.getElementById("chartmonth").value);
-const filterdate = new Date(month)
-let monthnumber = filterdate.getMonth();
-const curmonth =  monthnames[monthnumber];
-const prevmonth = monthnames[(monthnumber)==0? 11:monthnumber-1];
+var multiBarChart = (data1,data2,amount1,amount2,curyear,Prevyear) =>{
+let curmonth, prevmonth
+if ( document.getElementById('month').checked ){
+	const monthnames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+	const month = (document.getElementById("chartmonth").value);
+	const filterdate = new Date(month)
+	let monthnumber = filterdate.getMonth();
+	curmonth =  monthnames[monthnumber];
+	if ( document.getElementById('compare').checked){
+		const compmonth = (document.getElementById("chartcompmonth").value);
+		const filtercompdate = new Date(compmonth)
+		const compmonthnumber = filtercompdate.getMonth();
+		prevmonth =  monthnames[compmonthnumber];
+	}else{
+		prevmonth = monthnames[(monthnumber)==0? 11:monthnumber-1];
+	}
+}	
 const filter_sel = ( document.getElementById('month').checked ) ? choice = "M" : choice = "Y";
-console.log(monthnumber);
 var chart = new CanvasJS.Chart("chartContainer-2", {
 	animationEnabled: true,
 	/*title:{

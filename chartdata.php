@@ -10,19 +10,37 @@ if( isset($_POST['month']) || isset($_POST['year'])){
     $selmonth = $_POST['month'];
     $selyear = $_POST['year'];
     $choice = $_POST['choice'];
+	$compmonth = $_POST['compmonth'];
+	$compyear = $_POST['compyear'];
+	$iscompare = $_POST['iscompare'];
+
+	// echo( 'selmonth -'. $selmonth);
+	// echo( 'selyear -'. $selyear);
+	// echo( 'choice -'. $choice);
     
     if ( $choice == "M" ){
         $firstday = date("Y-m-d", strtotime($selmonth));
         $lastday =  date("Y-m-t", strtotime($selmonth));
-        $prevfirstday = date("Y-m-d", strtotime ("-1 month",strtotime ($selmonth)));
-        $prevlastday = date("Y-m-t", strtotime ("-1 month",strtotime ($selmonth)));
+		if ($iscompare){
+			$prevfirstday = date("Y-m-d", strtotime($compmonth));;
+			$prevlastday = date("Y-m-t", strtotime($compmonth));
+		}else{
+			$prevfirstday = date("Y-m-d", strtotime ("-1 month",strtotime ($selmonth)));
+			$prevlastday = date("Y-m-t", strtotime ("-1 month",strtotime ($selmonth)));
+		}
     }else{
-        $firstday = $_SESSION['sdate'];
-        $lastday =  $_SESSION['edate'];
+        $firstday = GetDescription('userstat','SDATE',"UID = $u_id AND FYR = '$selyear' " );
+        $lastday = GetDescription('userstat','EDATE',"UID = $u_id AND FYR = '$selyear' " ); 
 
-        $prevfinyr = GetDescription('userstat','FYR', 'FYR not in ('."$f_yr".') AND UID = '.$u_id.' AND SDATE < (SELECT SDATE FROM userstat where FYR = '."$f_yr".' AND UID = '.$u_id.')order by sdate DESC LIMIT 1');
-        $prevfirstday = GetDescription('userstat','SDATE',"UID = $u_id AND FYR = '$prevfinyr' " );
-        $prevlastday = GetDescription('userstat','EDATE',"UID = $u_id AND FYR = '$prevfinyr' " );   
+		if( $iscompare ){
+			$prevfinyr = $compyear;
+			$prevfirstday = GetDescription('userstat','SDATE',"UID = $u_id AND FYR = '$prevfinyr' " );
+			$prevlastday = GetDescription('userstat','EDATE',"UID = $u_id AND FYR = '$prevfinyr' " );   
+		}else{
+			$prevfinyr = GetDescription('userstat','FYR', 'FYR not in ('."$f_yr".') AND UID = '.$u_id.' AND SDATE < (SELECT SDATE FROM userstat where FYR = '."$selyear".' AND UID = '.$u_id.')order by sdate DESC LIMIT 1');
+			$prevfirstday = GetDescription('userstat','SDATE',"UID = $u_id AND FYR = '$prevfinyr' " );
+			$prevlastday = GetDescription('userstat','EDATE',"UID = $u_id AND FYR = '$prevfinyr' " ); 
+		}  
     }
 }
 $pichartdata = array();
@@ -62,6 +80,8 @@ $sqlqry = "
 		WHERE T.UID = $u_id AND T.TDATE BETWEEN '$firstday' AND '$lastday' AND T.CATID = 0
 		HAVING SUM(T.AMT) > 0
 		ORDER BY Catname";
+
+		//echo $sqlqry;
 
 $connect = mysqli_query($con , $sqlqry) ;
 if ( mysqli_num_rows($connect) > 0 ) {

@@ -76,6 +76,8 @@
 		break;
 		case "password":
 			PassUpdate();
+		case "chartfilter":
+			filterchartsel( $_POST['valueselected'],$_POST['iscompare'] );
 		break;
 	}
 
@@ -548,4 +550,43 @@ function catDelete($id){
 		$response = "<div class = 'error'><i class='far fa-times-circle'></i>&nbsp Can Not Delete, Category Found In Transaction!</div>";
 	}
 	echo $response;
+}
+
+function filterchartsel($selectedvalue,$iscompare){
+	$startdate = $_SESSION['sdate'];
+	$enddate = $_SESSION['edate'];
+	global $fyr;
+	global $userid;
+	$is_compare_bool = ($iscompare === "true"); //convert to boolean from text
+	$style = ($is_compare_bool) ? "width:35%;float:left" :  "width:50%;float:left";
+	if ($selectedvalue === "Month"){
+		$monthmin = date("Y-m", strtotime($startdate));
+		$monthmax = date("Y-m", strtotime($enddate));
+		$calendarmonth =  date('Y-m'); //date("Y")."-".date("m");
+		echo '<input type="month" id="chartmonth" name="chartmonth" class="form-control" 
+		value='.$calendarmonth.'
+		min = '.$monthmin.' max = '.$monthmax.'
+		style = '.$style.'>';
+	}else{
+		echo '<select name="fyr" id = "fyr" class="cmb" style='.$style.'>';
+			FillCombo('userstat','FYR','FYR',"UID =$userid ORDER BY SDATE DESC" );
+		echo '</select>';
+	}
+
+	if ($is_compare_bool){
+		if ($selectedvalue === "Month"){
+			$monthmin = date("Y-m", strtotime($startdate));
+			$monthmax = date("Y-m", strtotime($enddate));
+			$calendarmonth =  date('Y-m'); //date("Y")."-".date("m");
+			echo '<input type="month" id="chartcompmonth" name="chartmonth" class="form-control" 
+			value='.$calendarmonth.'
+			min = '.$monthmin.' max = '.$monthmax.'
+			style = '.$style.';margin-left:5px>';
+		}else{
+			echo '<select name="fyr" id = "compfyr" class="cmb" style='.$style.';margin-left:5px>';
+				FillCombo('userstat','FYR','FYR',"UID =$userid ORDER BY SDATE DESC" );
+			echo '</select>';
+		}
+	}
+
 }
