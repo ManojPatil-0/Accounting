@@ -14,15 +14,13 @@ if( isset($_POST['month']) || isset($_POST['year'])){
 	$compyear = $_POST['compyear'];
 	$iscompare = $_POST['iscompare'];
 
-	// echo( 'selmonth -'. $selmonth);
-	// echo( 'selyear -'. $selyear);
-	// echo( 'choice -'. $choice);
+	$is_compare_bool = ($iscompare === "true"); //convert to boolean from text
     
     if ( $choice == "M" ){
         $firstday = date("Y-m-d", strtotime($selmonth));
         $lastday =  date("Y-m-t", strtotime($selmonth));
-		if ($iscompare){
-			$prevfirstday = date("Y-m-d", strtotime($compmonth));;
+		if ($is_compare_bool){
+			$prevfirstday = date("Y-m-d", strtotime($compmonth));
 			$prevlastday = date("Y-m-t", strtotime($compmonth));
 		}else{
 			$prevfirstday = date("Y-m-d", strtotime ("-1 month",strtotime ($selmonth)));
@@ -32,7 +30,7 @@ if( isset($_POST['month']) || isset($_POST['year'])){
         $firstday = GetDescription('userstat','SDATE',"UID = $u_id AND FYR = '$selyear' " );
         $lastday = GetDescription('userstat','EDATE',"UID = $u_id AND FYR = '$selyear' " ); 
 
-		if( $iscompare ){
+		if( $is_compare_bool ){
 			$prevfinyr = $compyear;
 			$prevfirstday = GetDescription('userstat','SDATE',"UID = $u_id AND FYR = '$prevfinyr' " );
 			$prevlastday = GetDescription('userstat','EDATE',"UID = $u_id AND FYR = '$prevfinyr' " );   

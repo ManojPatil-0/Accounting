@@ -558,7 +558,7 @@ function filterchartsel($selectedvalue,$iscompare){
 	global $fyr;
 	global $userid;
 	$is_compare_bool = ($iscompare === "true"); //convert to boolean from text
-	$style = ($is_compare_bool) ? "width:35%;float:left" :  "width:50%;float:left";
+	$style = ($is_compare_bool) ? "width:35%;float:left;height:35px" :  "width:50%;float:left;height:35px";
 	if ($selectedvalue === "Month"){
 		$monthmin = date("Y-m", strtotime($startdate));
 		$monthmax = date("Y-m", strtotime($enddate));
