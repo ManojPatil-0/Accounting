@@ -238,7 +238,6 @@ if ( document.getElementById('month').checked ){
 	const filterdate = new Date(month)
 	let monthnumber = filterdate.getMonth();
 	curmonth =  getMonthName(monthnumber) //monthnames[monthnumber];
-	console.log(curmonth);
 	if ( document.getElementById('compare').checked){
 		const compmonth = (document.getElementById("chartcompmonth").value);
 		const filtercompdate = new Date(compmonth)
