@@ -236,7 +236,8 @@ if ( document.getElementById('month').checked ){
 	const month = (document.getElementById("chartmonth").value);
 	const filterdate = new Date(month)
 	let monthnumber = filterdate.getMonth();
-	curmonth =  getMonthName(month) //monthnames[monthnumber];
+	curmonth =  getMonthName(monthnumber) //monthnames[monthnumber];
+	console.log(curmonth);
 	if ( document.getElementById('compare').checked){
 		const compmonth = (document.getElementById("chartcompmonth").value);
 		const filtercompdate = new Date(compmonth)
@@ -341,7 +342,7 @@ function getChartHeader(MYsel,iscompare,mothelement,yearelement){
 		const year = givenmonth[0]
 		return monthname +" - " + year
 	}else{
-		return "Year - "  +  document.getElementById("compfyr").value;
+		return "Year - "  +  document.getElementById(yearelement).value;
 	}
 }
 
