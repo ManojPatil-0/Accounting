@@ -159,7 +159,7 @@ for( $i = 0; $i < count($result_2); $i++ ){
 // fill amount array;
 $amount = [$pichartamt,$barchartamt,$pichartamt_2];
 //Fill current and Previous fin years
-$financeyear =[$f_yr,$prevfinyr];
+$financeyear =[$selyear,$prevfinyr];
 
 //sort the array's
 sort($pichartdata);

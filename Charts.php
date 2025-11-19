@@ -145,6 +145,7 @@ function getData(){
 		}
 	}
 	choice = ( document.getElementById('month').checked ) ?"M" : "Y";
+	console.log(year)
 	makeAjaxCall(month,year,compmonth,compyear,choice,iscompare);
 }
 //call to chartdata.php
