@@ -60,7 +60,7 @@ if ( $user == "" ||  $fyr == "" ){   //if any of one is not set
 						<ul style="list-style-type: square;">
 							<li>For Web Version <a id = "link" href = "#" onclick="CopyLink()">
 							<span id = "linkval" style = "display:none;" >http://accountingbymanoj.lovestoblog.com/</span> Copy Link </a> And Open The App In Chrome Browser.</li>
-							<li>Last Updated On 16/11/2025.</li>
+							<li>Last Updated On 19/11/2025.</li>
 							<li>Keep Updated By Clearing App Data, Goto Mobile Setting -> Apps ->Accounting -> Clear Data.</li>
 							<li>Click On Dashboard Account For Detail Report.</li>
 							<li>Upload Image Only When Necessary. Use Minimum Size Images.</li>
@@ -104,7 +104,9 @@ function loadReport(acname){
 	Cookies.set('option',0);
 	Cookies.set('account',acname);
 	document.cookie = "reporttype = Report"; //set cookie for dashboard again
+	//add or remove active class
 	//load report based on cookies
+	//$('#mySidenav a:contains("Report")').addClass("menuActive").siblings().removeClass("menuActive");
 	GetPage('Report');
 }
 function CopyLink(){

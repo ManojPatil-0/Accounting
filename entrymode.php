@@ -580,7 +580,6 @@ function filterchartsel($selectedvalue,$iscompare){
 			$calendarmonth =  date('Y-m'); //date("Y")."-".date("m");
 			echo '<input type="month" id="chartcompmonth" name="chartmonth" class="form-control" 
 			value='.$calendarmonth.'
-			min = '.$monthmin.' max = '.$monthmax.'
 			style = '.$style.';margin-left:5px>';
 		}else{
 			echo '<select name="fyr" id = "compfyr" class="cmb" style='.$style.';margin-left:5px>';

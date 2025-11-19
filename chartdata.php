@@ -42,6 +42,7 @@ if( isset($_POST['month']) || isset($_POST['year'])){
     }
 }
 $pichartdata = array();
+$pichartdata_2 = array();
 $data_point = array();
 $data_point_2 = array();
 $catarr = array('NA'); // default NA as SQL have NA on blank category
@@ -50,6 +51,7 @@ $catgarr2 = array();
 $amount = array();
 $financeyear = array();
 $pichartamt = 0;
+$pichartamt_2 = 0;
 $barchartamt = 0;
 $i = 0;
 
@@ -90,6 +92,33 @@ if ( mysqli_num_rows($connect) > 0 ) {
 		$pichartamt = $pichartamt + $rows['Amt'];
 	}
 }
+
+$sqlqry = "
+		SELECT SUM(T.AMT) as Amt,
+		case when isnull(C.CATNAME) or C.CATNAME = '' then 'NA' else C.CATNAME end as Catname
+		FROM transactions AS T 
+		INNER JOIN category AS C ON C.CATID = T.CATID AND C.ACTIVE = 'Y' AND C.UID = T.UID
+		WHERE T.UID = $u_id AND T.TDATE BETWEEN '$prevfirstday' AND '$prevlastday' 
+		GROUP BY C.CATNAME
+
+		UNION ALL
+
+		SELECT SUM(T.AMT) as Amt,'NA' as Catname
+		FROM transactions AS T 
+		WHERE T.UID = $u_id AND T.TDATE BETWEEN '$prevfirstday' AND '$prevlastday' AND T.CATID = 0
+		HAVING SUM(T.AMT) > 0
+		ORDER BY Catname";
+
+		//echo $sqlqry;
+
+$connect = mysqli_query($con , $sqlqry) ;
+if ( mysqli_num_rows($connect) > 0 ) {
+	while ( $rows = mysqli_fetch_array($connect,MYSQLI_ASSOC) ){
+		$pichartdata_2[] = array("label"=>$rows['Catname'],"y"=>$rows['Amt']);
+		$pichartamt_2 = $pichartamt_2 + $rows['Amt'];
+	}
+}
+
 $sqlqry ="";
 $sqlqry = "
 		SELECT SUM(T.AMT) as Amt,
@@ -128,18 +157,19 @@ for( $i = 0; $i < count($result_2); $i++ ){
 	$data_point_2[] = array("label"=>$result_2[$i],"y"=>0);
 }
 // fill amount array;
-$amount = [$pichartamt,$barchartamt];
+$amount = [$pichartamt,$barchartamt,$pichartamt_2];
 //Fill current and Previous fin years
 $financeyear =[$f_yr,$prevfinyr];
 
 //sort the array's
 sort($pichartdata);
+sort($pichartdata_2);
 sort($data_point);
 sort($data_point_2);
 
 
 
-$reponsearr = array("doughnout"=>$pichartdata,"bar_1"=>$data_point,"bar_2"=>$data_point_2,"amount"=>$amount,"year"=>$financeyear);
+$reponsearr = array("doughnout"=>$pichartdata,"doughnout_2"=>$pichartdata_2,"bar_1"=>$data_point,"bar_2"=>$data_point_2,"amount"=>$amount,"year"=>$financeyear);
 //reponse as JSON object
 echo  json_encode($reponsearr, JSON_NUMERIC_CHECK);
 ?> 
