@@ -24,7 +24,7 @@ $monthmax = date("Y",strtotime($enddate)).'-'.date("m",strtotime($enddate));
 					<input type="checkbox" id="compare" name="select" value="compare"
 					style = "vertical-align:text-bottom;height:18px;width:18px"
 					title = "Use this option to comapare in Bar Chart, doughnout will remain Same."
-					onclick = 'getSelectionData(this.value)'; >&nbsp Compare
+					onclick = 'getSelectionData(this.value)'; >&nbsp Compare 
 				</label><br>
 			</div>
 			<div id = "chartfilter">
@@ -73,11 +73,7 @@ $(".chart_2").click( function(){
 })
 
 function showCharts(chartname,compareval){
-	if (!compareval){
-		$(chartname).addClass("expanded");
-	}else{
-		$(chartname).toggleClass("expanded");
-	}
+	$(chartname).toggleClass("expanded");
 }
 
 function showChartContainer(chartname,compareval){
@@ -92,13 +88,10 @@ function showChartContainer(chartname,compareval){
 //get selection data------
 function getSelectionData(selval){
 	const iscompare = document.getElementById('compare').checked  ? true : false;
-	selval = document.getElementById('month').checked ? "Month" : "Year";
-	if(!iscompare){
-		$('#compclass').toggleClass('rotated');
-	}
+	const filterval = document.getElementById('month').checked ? "Month" : "Year";
 	document.getElementById("chartamt_2").innerHTML = "Month - Year - Amount";
-	selDataAjaxCall( selval, iscompare );
-	if(selval === "Month" && selval === "Year")  return;
+	selDataAjaxCall( filterval, iscompare );
+	if(selval === "Month" || selval === "Year")  return;
 	showChartContainer(".chart_2",iscompare);
 	showCharts("#chartContainer-1",iscompare);
 }

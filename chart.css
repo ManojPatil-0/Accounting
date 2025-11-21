@@ -27,13 +27,16 @@
 }
 .chart_1, .chart_2 {
     cursor: pointer; 
+    height: 28px;
 }
 .chart_2{
     z-index: 1;
     visibility: hidden;
+    height: 0px;
 }
 .chart2toggle{
     visibility: visible;
+    height: 28px;
 }
 #chartContainer{
     display: flex;

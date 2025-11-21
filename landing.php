@@ -60,7 +60,7 @@ if ( $user == "" ||  $fyr == "" ){   //if any of one is not set
 						<ul style="list-style-type: square;">
 							<li>For Web Version <a id = "link" href = "#" onclick="CopyLink()">
 							<span id = "linkval" style = "display:none;" >http://accountingbymanoj.lovestoblog.com/</span> Copy Link </a> And Open The App In Chrome Browser.</li>
-							<li>Last Updated On 19/11/2025.</li>
+							<li>Last Updated On 21/11/2025.</li>
 							<li>Keep Updated By Clearing App Data, Goto Mobile Setting -> Apps ->Accounting -> Clear Data.</li>
 							<li>Click On Dashboard Account For Detail Report.</li>
 							<li>Upload Image Only When Necessary. Use Minimum Size Images.</li>
