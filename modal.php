@@ -83,7 +83,7 @@ echo '<div class="modal-dialog" style = "background-color:white">';
 							}else{
 								echo '<div class="item">';
 							}
-							echo '<img src=images/'.$newimg.'?cachebuster='.Date("Y-m-d H:i:s").' id = "modalimage" alt = "Image"'.$i.'></br>';
+							echo '<a  href=images/'.$newimg.' download> <img src=images/'.$newimg.'?cachebuster='.Date("Y-m-d H:i:s").' id = "modalimage" alt = "Image"'.$i.'></a></br>';
 							$i = $i+1;
 								echo '</div>';
 						}
