@@ -112,7 +112,9 @@ $(document).ready( function(){
 		Cookies.set('fromdt',fdate);
 		Cookies.set('todt',tdate);
 		Cookies.set('option',opt);
-		if ( <?php echo $reporttype === "Narration Rpt"?> ){
+		const reporttype =  Cookies.get('reporttype') 
+		console.log('partycd ', reporttype);
+		if ( reporttype === "Narration Rpt"){
 			Cookies.set('account',"");
 		}else{
 			Cookies.set('account',cmb);
