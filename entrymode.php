@@ -73,12 +73,13 @@
 				break;
 		case "login":
 			GetFyr();
-		break;
+			break;
 		case "password":
 			PassUpdate();
+			break;
 		case "chartfilter":
 			filterchartsel( $_POST['valueselected'],$_POST['iscompare'] );
-		break;
+			break;
 	}
 
 function GetMax($table,$field){

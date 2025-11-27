@@ -112,7 +112,11 @@ $(document).ready( function(){
 		Cookies.set('fromdt',fdate);
 		Cookies.set('todt',tdate);
 		Cookies.set('option',opt);
-		Cookies.set('account',cmb);
+		if ( <?php echo $reporttype === "Narration Rpt"?> ){
+			Cookies.set('account',"");
+		}else{
+			Cookies.set('account',cmb);
+		}
 		GetTable(fdate,tdate,opt,cmb,nartxt);
 	})
 
