@@ -87,7 +87,8 @@ function TransFill(){
 			}else{
 				$imgstatus = 'No';
 			}
-			$response[7] = $imgstatus;
+			//$response[7] = $imgstatus;
+			$response[7] = $imgarr;
 			$response[8] = $rows['CATID'];
 		}
 		echo (json_encode($response));

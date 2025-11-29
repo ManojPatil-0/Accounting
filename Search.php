@@ -84,7 +84,30 @@ $(document).ready(function(){
 						$("#amount").val(response[5]);
 						$("#nar").val(response[6]);
 						$("#catg").val(response[8]);
-						$("label[for = image]").text('Uploaded Image : '+response[7]+' Image(s).');
+						//$("label[for = image]").text('Uploaded Image : '+response[7]+' Image(s).');
+						document.getElementById("imglist").innerHTML  = "";
+						let imagearr= response[7].replace(/[\[\]"]/g, '').split(",");
+						updateUiList(imagearr);
+						function updateUiList(arr){
+							for( let i = 0; i< arr.length ; i++ ){
+								const newli = document.createElement('li');
+								newli.textContent  = arr[i];
+								const deletebtn = document.createElement("button");
+								deletebtn.textContent  = "X"
+								deletebtn.type = "button";
+								deletebtn.onclick = function(){
+									imageDelete(i);
+								}
+								newli.appendChild(deletebtn);
+								document.getElementById("imglist").appendChild(newli);
+							}
+						}
+						function imageDelete(position){
+							const filteredfiles = imagearr.filter( (res,index) =>  index !== position );
+							document.getElementById("imglist").innerHTML  = "";
+							updateUiList(filteredfiles);
+							imagearr = filteredfiles;
+						}
 						//$("#images").empty().append('<img src="images/'+response[7]);
 						$("#search").hide();
 					}else if( table == 'usermaster' ){

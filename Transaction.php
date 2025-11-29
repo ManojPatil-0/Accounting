@@ -49,7 +49,8 @@ include_once('common.php');
 		</div>
 		<div class="form-group">
 			<label for="image" id = "labelimage" value = "" >Upload Image :</label>
-			<input type = "file" name = "Img_file_arr[]" value = "" id = "images" multiple class = "images" /> 
+			<ul id = "imglist"></ul>
+			<input type = "file" name = "Img_file_arr[]" value = "" id = "images" multiple class = "images" onchange='createImageList(event);'/> 
 		</div>
 		<div class="form-group">
 			<label for="Narration">Narration :</label>
@@ -135,7 +136,8 @@ $(document).ready(function(){
 			})
 		}else{
 			newfilename = '';
-			filearr = [];
+			//filearr = [] ;
+			getListImgData();
 			SaveFunction('save','transactions','transaction');
 		}
 	})
@@ -199,6 +201,67 @@ function SaveFunction(idname,setfocus ,edclass){
 			break
 	}
 }
+
+function createImageList(event){
+	document.getElementById("imglist").innerHTML  = "";
+	selectedfile = event.target.files;
+	filearr = [...selectedfile]
+	updateUiList(filearr);
+}
+
+function updateUiList(arr){
+	for( let i = 0; i< arr.length; i++ ){	
+		//get file name
+		const property = arr[i];
+		const id = $("#tid").val();
+		const fileExten = property.name.split('.');
+		const userforimage = <?php echo $id; ?> ;
+		const fyrforimage = <?php echo $fyr; ?> ;
+		const newfilename = `${userforimage}${id}${fyrforimage}${i}.${fileExten[1]}` //userforimage + id + fyrforimage+i+'.'+fileExten;
+		//----------------------
+		const newli = document.createElement('li');
+		newli.textContent  = newfilename;
+		const deletebtn = document.createElement("button");
+		deletebtn.textContent  = "X"
+		deletebtn.type = "button";
+		deletebtn.onclick = function(){
+			imageDelete(i);
+		}
+		newli.appendChild(deletebtn);
+		document.getElementById("imglist").appendChild(newli);
+	}
+}
+
+function imageDelete(position){
+	const filteredfiles = filearr.filter( (res,index) =>  index !== position );
+	document.getElementById("imglist").innerHTML  = "";
+	updateUiList(filteredfiles);
+	filearr = filteredfiles
+	updateFileInputFiles();
+}
+
+function getListImgData(){
+	//in edit mode fill image names from list.
+	const itemlistelemt = document.getElementById('imglist');
+	const listitem = itemlistelemt.querySelectorAll("li");
+	filearr = [];
+	listitem.forEach( itemname => {
+		let imgname =  itemname.textContent;
+		imgname = imgname.replace(/X/g,"")
+		filearr.push(imgname);
+	});
+}
+
+function updateFileInputFiles(){
+	//this function will update the input type directly.
+	const fileInput = document.getElementById('images');
+    const dataTransfer = new DataTransfer(); 
+    filearr.forEach(file => {
+        dataTransfer.items.add(file);
+    });
+    fileInput.files = dataTransfer.files; 
+}
+
 </script>
 
 

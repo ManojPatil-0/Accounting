@@ -418,4 +418,22 @@ a.left.carousel-control,a.right.carousel-control {
 .images:focus{
 	outline : 5px auto #0d98e8 !important;
 }
+#imglist{
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style: none;
+}
+#imglist li{
+	padding: 5px 5px;
+    background-color: lightgray;
+	margin-right: 2px;
+    margin-bottom: 2px;
+}
+#imglist li button{
+	margin-left: 10px;
+    border: none;
+}
+
 /***************************************************************/

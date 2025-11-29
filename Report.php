@@ -113,7 +113,6 @@ $(document).ready( function(){
 		Cookies.set('todt',tdate);
 		Cookies.set('option',opt);
 		const reporttype =  Cookies.get('reporttype') 
-		console.log('partycd ', reporttype);
 		if ( reporttype === "Narration Rpt"){
 			Cookies.set('account',"");
 		}else{

@@ -30,6 +30,7 @@ function ClearControl(classname){
 		}
 		//set image lable to upload.
 		$("label[for = image]").text('Upload Image : ');
+		$("."+classname).find('ul').empty();
 	});
 	BtnControl('cancel','',classname);
 }
