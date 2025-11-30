@@ -228,8 +228,9 @@ textarea {
 	width : 100% ;
 }
 a.left.carousel-control,a.right.carousel-control {
-    height: fit-content;
-	top: 50%;
+    /* height: fit-content;
+	top: 50%; */
+	background: transparent;
 }
 /*****************************************************************/
 

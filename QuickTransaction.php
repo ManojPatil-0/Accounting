@@ -330,26 +330,29 @@ function GetPage(head){
 }
 
 function createImageList(event){
-	document.getElementById("imglist").innerHTML  = "";
+	//document.getElementById("imglist").innerHTML  = "";
 	selectedfile = event.target.files;
 	filearr = [...selectedfile]
 	updateUiList(filearr,"N");
 }
 
 function updateUiList(arr,mode){
+	let newfilename
 	for( let i = 0; i< arr.length; i++ ){
-		if (mode !== "P"){
+		if (mode === "N"){
 			//get file name
+			console.log(arr[i]);
 			const property = arr[i];
 			const id = $("#tid").val();
 			const fileExten = property.name.split('.');
 			const userforimage = <?php echo $id; ?> ;
 			const fyrforimage = <?php echo $fyr; ?> ;
-			const newfilename = `${userforimage}${id}${fyrforimage}${i}.${fileExten[1]}` //userforimage + id + fyrforimage+i+'.'+fileExten;
+			newfilename = `${userforimage}${id}${fyrforimage}${i}.${fileExten[1]}` //userforimage + id + fyrforimage+i+'.'+fileExten;
 			//----------------------
 		}else{
 			newfilename = arr[i];
 		}	
+		console.log("filename",newfilename)
 		const newli = document.createElement('li');
 		newli.textContent  = newfilename;
 		const deletebtn = document.createElement("button");

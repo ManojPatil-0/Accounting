@@ -86,8 +86,12 @@ $(document).ready(function(){
 						$("#catg").val(response[8]);
 						//$("label[for = image]").text('Uploaded Image : '+response[7]+' Image(s).');
 						document.getElementById("imglist").innerHTML  = "";
-						let imagearr= response[7].replace(/[\[\]"]/g, '').split(",");
-						updateUiList(imagearr);
+						let imagearr;
+						if (response[7] !== "{}"){
+							imagearr= response[7].replace(/[\[\]"]/g, '').split(",");
+							console.log('aarray',imagearr)
+							updateUiList(imagearr);
+						}
 						function updateUiList(arr){
 							for( let i = 0; i< arr.length ; i++ ){
 								const newli = document.createElement('li');
