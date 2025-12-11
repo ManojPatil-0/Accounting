@@ -23,7 +23,9 @@
     transition: height 0.5s ease-in-out;
 }
 .expanded{
-    height: 435px;
+    /* height: fit-content; */
+    max-height: 800px;
+    min-height: 435px;
 }
 .chart_1, .chart_2 {
     cursor: pointer; 
