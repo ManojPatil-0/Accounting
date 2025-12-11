@@ -87,7 +87,7 @@ if ( isset($_GET['transid']) ){
 				<input type="number" name ="amount" id="amount" class="form-control"  autocomplete="off" onfocus = 'SetColor(this.id)'  onblur = 'ReleaseColor(this.id)' value = "<?php  echo $tamt;?>">
 			</div>
 			<div class="form-group">
-				<label for="image" id = "labelimage" value = ""><?php echo 'Upload Image : '.$timagename ;  ?></label> 
+				<!-- <label for="image" id = "labelimage" value = ""><?php echo 'Upload Image : '.$timagename ;  ?></label>  -->
 				<ul id = "imglist"></ul> 
 				<input type = "file" name = "Img_file_arr[]" id = "images" multiple class = "images" onchange='createImageList(event)';/> 
 			</div>
@@ -110,6 +110,7 @@ performance.navigation.type == 1 ? window.location.href = 'landing.php' : null;
 var tdate,party1,party2,crdr,category,amount,nar,id,newfilename;
 var filearr = [];
 let imagearr = [];
+var savefilearr = [];
 $(document).ready(function(){
 	$("#add").attr('disabled',true)
 	$("#edit").attr('disabled',true)
@@ -119,6 +120,7 @@ $(document).ready(function(){
 	//convert image response to array
 	imagearr = <?php echo $imgarr  ?>;
 	if( imagearr.length > 0 ) {
+		filearr = [...imagearr];
 		updateUiList(imagearr,"P");
 	}
 	
@@ -143,19 +145,18 @@ $(document).ready(function(){
 		if($("#images").val() !== ""){
 			/*** Image Details with Adding New Name *******************************/
 			var form_data = new FormData();
-			vartotale = document.getElementById("images").files.length
-			filearr = []; //empty the array
-			for( var i = 0 ; i < vartotale;i++ ){
-				var property = document.getElementById("images").files[i];
-				var fileExten = property.name.split('.').pop();
-				var userforimage = <?php echo $id; ?> ;
-				var fyrforimage = <?php echo $fyr; ?> ;
-				newfilename = userforimage + id + fyrforimage+i+'.'+fileExten;
-				filearr.push(newfilename);
-				form_data.append("file[]",property,filearr[i]);
-				//alert(newfilename);
+			let newfilename;
+			const id = $("#tid").val();
+			const userforimage = <?php echo $id; ?> ;
+			const fyrforimage = <?php echo $fyr; ?> ;
+			for( let i = 0 ; i < filearr.length;i++ ){
+				if (filearr[i] instanceof File) {
+					const fileExten = filearr[i].name.split('.').pop()
+					newfilename = userforimage + id + fyrforimage+i+'.'+fileExten
+					form_data.append("file[]",filearr[i],newfilename);
+				}
 			}
-			/**********************************************************************/
+			//********************************************************************/
 			$("#msg").show();
 			$("#msg").html('');
 			$(".transloader").show();
@@ -209,6 +210,7 @@ function SaveFunction(idname,setfocus ,edclass){
 	mode = "E"
 	//show loader
 	$(".transloader").show();
+	getImgArrForSave(filearr);
 	//geting id from test.php and asinging it to variable('id')
 	switch(idname){
 		case 'save':
@@ -235,7 +237,7 @@ function SaveFunction(idname,setfocus ,edclass){
 							party2 : party2,
 							category : category,
 							amount :amount,
-							imagename : filearr,
+							imagename : savefilearr,
 							nar :nar
 						},
 				success : function(response){
@@ -331,53 +333,56 @@ function GetPage(head){
 
 function createImageList(event){
 	//document.getElementById("imglist").innerHTML  = "";
+	getListImgData();
 	selectedfile = event.target.files;
-	filearr = [...selectedfile]
-	updateUiList(filearr,"N");
+	filearr = [...filearr,...selectedfile];
+	updateUiList(filearr);
+	//updateFileInputFiles()
 }
 
-function updateUiList(arr,mode){
-	let newfilename
-	for( let i = 0; i< arr.length; i++ ){
-		if (mode === "N"){
-			//get file name
-			console.log(arr[i]);
+function updateUiList(arr){
+	document.getElementById("imglist").innerHTML  = "";
+	for( let i = 0; i< arr.length; i++ ){	
+		//get file name
+		let newfilename
+		const id = $("#tid").val();
+		const userforimage = <?php echo $id; ?> ;
+		const fyrforimage = <?php echo $fyr; ?> ;
+		if (arr[i] instanceof File){
 			const property = arr[i];
-			const id = $("#tid").val();
 			const fileExten = property.name.split('.');
-			const userforimage = <?php echo $id; ?> ;
-			const fyrforimage = <?php echo $fyr; ?> ;
 			newfilename = `${userforimage}${id}${fyrforimage}${i}.${fileExten[1]}` //userforimage + id + fyrforimage+i+'.'+fileExten;
 			//----------------------
 		}else{
-			newfilename = arr[i];
-		}	
-		console.log("filename",newfilename)
+			const fileExten =arr[i].split('.');
+			newfilename = `${userforimage}${id}${fyrforimage}${i}.${fileExten[1]}` 
+		}
+
 		const newli = document.createElement('li');
 		newli.textContent  = newfilename;
 		const deletebtn = document.createElement("button");
 		deletebtn.textContent  = "X"
 		deletebtn.type = "button";
+		deletebtn.classList.add('delete-btn'); 
 		deletebtn.onclick = function(){
-			imageDelete(i,mode);
+			imageDelete(i,event);
 		}
 		newli.appendChild(deletebtn);
 		document.getElementById("imglist").appendChild(newli);
 	}
 }
-function imageDelete(position,mode){
-	let filteredfiles;
-	if(mode === "P"){
-		filteredfiles = imagearr.filter( (res,index) =>  index !== position );
-		imagearr = filteredfiles;
-	}else{
-		filteredfiles = filearr.filter( (res,index) =>  index !== position );
-		filearr = filteredfiles;
-	}
-	document.getElementById("imglist").innerHTML  = "";
-	updateUiList(filteredfiles,mode);
+
+
+function imageDelete(position,e){
+	const filteredfiles = filearr.filter( (res,index) =>  index !== position );
+	//document.getElementById("imglist").innerHTML  = "";
+	const listItem = event.target.closest('li');
+	listItem.remove();
+	updateUiList(filteredfiles);
+	filearr = filteredfiles
 	updateFileInputFiles();
 }
+
 function getListImgData(){
 	//in edit mode fill image names from list.
 	const itemlistelemt = document.getElementById('imglist');
@@ -389,14 +394,49 @@ function getListImgData(){
 		filearr.push(imgname);
 	});
 }
+
 function updateFileInputFiles(){
 	//this function will update the input type directly.
 	const fileInput = document.getElementById('images');
     const dataTransfer = new DataTransfer(); 
     filearr.forEach(file => {
-        dataTransfer.items.add(file);
+		if (file instanceof File) {
+            dataTransfer.items.add(file);
+        }
     });
     fileInput.files = dataTransfer.files; 
+}
+
+function getListImgData() {
+    const itemlistelemt = document.getElementById('imglist');
+    const listitem = itemlistelemt.querySelectorAll("li");
+    filearr = []; // Clear array before refilling
+    listitem.forEach(itemname => {
+        let imgname = itemname.textContent;
+        // Remove the 'X' button text from the filename string
+        imgname = imgname.replace(/X/g, "").trim(); 
+        filearr.push(imgname);
+    });
+}
+
+function getImgArrForSave(arr){
+	savefilearr = [];
+	let newfilename;
+	const id = $("#tid").val();
+	const userforimage = <?php echo $id; ?> ;
+	const fyrforimage = <?php echo $fyr; ?> ;
+	for ( let i = 0; i < arr.length; i++ ){
+		if (arr[i] instanceof File) {
+			const property = arr[i];
+			const fileExten = property.name.split('.');
+			newfilename = `${userforimage}${id}${fyrforimage}${i}.${fileExten[1]}`
+			savefilearr.push(newfilename);
+		}else{
+			const fileExten =arr[i].split('.');
+			newfilename = `${userforimage}${id}${fyrforimage}${i}.${fileExten[1]}` 
+			savefilearr.push(newfilename);
+		}
+	}
 }
 </script>
 

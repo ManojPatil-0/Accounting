@@ -9,17 +9,26 @@ for($i=0;$i<$count;$i++){
 		$tmpfilename =  $_FILES ['file']['tmp_name'][$i];
 		$imagesize = $_FILES['file']['size'][$i];
 		$filetype = pathinfo($filename,PATHINFO_EXTENSION);
-		
+		// echo 'filetype'. $filetype . PHP_EOL;
+		// echo 'filename'. $filename . PHP_EOL;
+
 		// Allow certain file formats 
 		$allowTypes = array('jpg','png','jpeg'); 
 		
 		if ( in_array($filetype,$allowTypes )  ) {
-			if ( $imagesize < 5242880 ) {  //5mb
+			if ( $imagesize >=  51200 && $imagesize <= 3145728 ) {  //3mb and 50kb then process
 				$compressedImage = compressImage($tmpfilename, $filename);
 				if ( !$compressedImage ) {
 					$response['error'] = "<div class = 'error'><i class='far fa-times-circle'></i>Failed To Store Image.</div>";
 				}
-			}else{
+			}elseif ($imagesize < 51200   ){
+				if (move_uploaded_file($tmpfilename, $filename)) {
+                    $fileSuccessfullySaved = true;
+                } else {
+                    $response['error'] = "<div class = 'error'><i class='far fa-times-circle'></i>Failed To Move Small Image.</div>";
+                }
+			}
+			else{
 				$response['error'] = "<div class = 'error'><i class='far fa-times-circle'></i>&nbsp Image Size Is Too Big.</div>";
 			}
 		}else{
@@ -48,7 +57,7 @@ function compressImage($source, $destination) {
     } 
      
     // Save image 
-	imageResize($image,500,$destination,60);
+	imageResize($image,550,$destination,70); //prev -> 500,60
     //imagejpeg($image, $destination, $quality); 
 	return $destination;
 } 
@@ -59,12 +68,12 @@ function imageResize( $file, $max_resolution,$destination,$quality ){
 	
 	$ratio = $max_resolution / $original_width;
 	$new_width = $max_resolution;
-	$new_height = $original_height * $ratio;
+	$new_height = round($original_height * $ratio);
 	
 	if ($new_height > $max_resolution ){
 		$ratio = $max_resolution / $original_height;
 		$new_height = $max_resolution;
-		$new_width = $original_width * $ratio;
+		$new_width = round($original_width * $ratio);
 	}
 	
 	if ( $file ) {

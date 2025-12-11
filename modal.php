@@ -8,6 +8,7 @@ $narr = '';
 $amount = 0;
 
 @session_start();
+$cacheBuster = time(); 
 
 if (isset( $_SESSION['uid'] )){
 	$uid = $_SESSION['uid'];
@@ -83,7 +84,7 @@ echo '<div class="modal-dialog" style = "background-color:white">';
 							}else{
 								echo '<div class="item">';
 							}
-							echo '<a  href=images/'.$newimg.' download> <img src=images/'.$newimg.'?cachebuster='.Date("Y-m-d H:i:s").' id = "modalimage" alt = "Image"'.$i.'></a></br>';
+							echo '<a  href=images/'.$newimg.' download> <img src=images/'.$newimg.'?cb='.$cacheBuster.' id = "modalimage" alt = "Image"'.$i.'></a></br>';
 							$i = $i+1;
 								echo '</div>';
 						}

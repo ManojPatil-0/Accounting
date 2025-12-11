@@ -89,7 +89,6 @@ $(document).ready(function(){
 						let imagearr;
 						if (response[7] !== "{}"){
 							imagearr= response[7].replace(/[\[\]"]/g, '').split(",");
-							console.log('aarray',imagearr)
 							updateUiList(imagearr);
 						}
 						function updateUiList(arr){
@@ -100,7 +99,7 @@ $(document).ready(function(){
 								deletebtn.textContent  = "X"
 								deletebtn.type = "button";
 								deletebtn.onclick = function(){
-									imageDelete(i);
+									imageDelete(i,event);
 								}
 								newli.appendChild(deletebtn);
 								document.getElementById("imglist").appendChild(newli);
