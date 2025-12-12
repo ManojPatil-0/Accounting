@@ -17,16 +17,15 @@ for($i=0;$i<$count;$i++){
 		
 		if ( in_array($filetype,$allowTypes )  ) {
 			if ( $imagesize >=  51200 && $imagesize <= 3145728 ) {  //3mb and 50kb then process
-				$compressedImage = compressImage($tmpfilename, $filename);
+				$compressedImage = compressImage($tmpfilename, $filename, true);
 				if ( !$compressedImage ) {
 					$response['error'] = "<div class = 'error'><i class='far fa-times-circle'></i>Failed To Store Image.</div>";
 				}
 			}elseif ($imagesize < 51200   ){
-				if (move_uploaded_file($tmpfilename, $filename)) {
-                    $fileSuccessfullySaved = true;
-                } else {
-                    $response['error'] = "<div class = 'error'><i class='far fa-times-circle'></i>Failed To Move Small Image.</div>";
-                }
+				$compressedImage = compressImage($tmpfilename, $filename, false);
+				if ( !$compressedImage ) {
+					$response['error'] = "<div class = 'error'><i class='far fa-times-circle'></i>Failed To Store Image.</div>";
+				}
 			}
 			else{
 				$response['error'] = "<div class = 'error'><i class='far fa-times-circle'></i>&nbsp Image Size Is Too Big.</div>";
@@ -38,7 +37,7 @@ for($i=0;$i<$count;$i++){
 }
 exit(json_encode($response));
 //function to comperss the image ---------------------------------------------
-function compressImage($source, $destination) { 
+function compressImage($source, $destination, $docompress) { 
     // Get image info 
     $imgInfo = getimagesize($source); 
     $mime = $imgInfo['mime']; 
@@ -57,8 +56,13 @@ function compressImage($source, $destination) {
     } 
      
     // Save image 
-	imageResize($image,550,$destination,70); //prev -> 500,60
-    //imagejpeg($image, $destination, $quality); 
+	if($docompress){
+		imageResize($image,550,$destination,70); //prev -> 500,60
+	} else{
+		imagejpeg($image, $destination, 70);
+	}
+
+    //imagejpeg($image, $destination, $quality);
 	return $destination;
 } 
 
