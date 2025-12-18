@@ -409,9 +409,11 @@ function UserDelete($id){
 	if (DltQry('usermaster',$whereclause) == true ){
 		if (DltQry('userstat',$whereclause) == true ){
 			if (DltQry('acmaster',$whereclause) == true ){
-				if (DltQry('transactions',$whereclause) == true ){
-					if (DltQry('transactions',$whereclause) == true ){
-						$response = "<div class = 'success'><i class='far fa-check-circle'></i>&nbsp Delete SuccessFull</div>";
+				if( DltQry('acmaster',$whereclause) == true  ){
+					if (DltQry('category',$whereclause) == true ){
+						if (DltQry('transactions',$whereclause) == true ){
+							$response = "<div class = 'success'><i class='far fa-check-circle'></i>&nbsp Delete SuccessFull</div>";
+						}
 					}
 				}
 			}
